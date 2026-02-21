@@ -55,3 +55,14 @@ class SQLValidationError(DomainError):
             f"SQL template missing or empty for intent: {intent!r}",
             detail=f"Intent: {intent!r}",
         )
+
+
+class UnsafeSQLError(DomainError):
+    """Raised when a SQL query is not read-only (e.g. DROP, DELETE, TRUNCATE)."""
+
+    def __init__(self, reason: str) -> None:
+        self.reason = reason
+        super().__init__(
+            "Query not allowed: only read-only (SELECT) queries are permitted.",
+            detail=reason,
+        )

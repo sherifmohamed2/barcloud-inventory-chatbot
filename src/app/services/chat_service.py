@@ -18,6 +18,7 @@ from src.app.constants import SYSTEM_PROMPT
 from src.app.domain.conversation import build_messages, trim_history
 from src.app.domain.intent_detection import resolve
 from src.app.domain.errors import BarCloudError
+from src.app.domain.sql_safety import validate_sql_readonly
 from src.app.config import get_settings
 
 
@@ -87,20 +88,24 @@ class ChatService:
         parsed: LLMResponseSchema = completion.choices[0].message.parsed
         usage = completion.usage
 
-        # 7. Get SQL query for the detected intent
+        # 7. Validate SQL is read-only (no DROP, DELETE, etc.)
+        if parsed.sql_query:
+            validate_sql_readonly(parsed.sql_query)
+
+        # 8. Get SQL query for the detected intent
         # LLM provides answer + sql directly via structured output
         # intent detection provides the enum for audit/logging
         intent = resolve(
             parsed.sql_query[:30] if parsed.sql_query else "unknown"
         )
-        sql_query = parsed.sql_query  # LLM generates the SQL directly
+        sql_query = parsed.sql_query or ""
 
-        # 8. Append assistant response to history
+        # 9. Append assistant response to history
         history.append(
             {"role": "assistant", "content": parsed.natural_language_answer}
         )
 
-        # 9. Save updated session
+        # 10. Save updated session
         self._store.save(session_id, history)
 
         latency_ms = int((time.perf_counter() - t_start) * 1000)
