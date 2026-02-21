@@ -26,6 +26,8 @@ wheels/
 .installed.cfg
 *.egg
 
+# Tests
+tests/
 # Environment / secrets
 .env
 .env.local
