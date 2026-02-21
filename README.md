@@ -26,6 +26,15 @@ Chat interface with conversation history, present query panel, and metrics (late
 ![BarCloud Inventory Chatbot — chat UI, present query, and metrics](docs/assets/barcloud-chatbot-ui.png)
 
 ---
+### SQL safety validation
+
+Generated SQL is validated before it is returned or used. **Only read-only (SELECT) queries are allowed.** Any query containing destructive or modifying keywords is rejected, and the user sees a clear error instead of the query.
+
+Blocked keywords include: `DROP`, `DELETE`, `TRUNCATE`, `INSERT`, `UPDATE`, `ALTER`, `CREATE`, `EXEC`, `EXECUTE`, `MERGE`, and others. This prevents user messages from producing queries that could modify or destroy data (e.g. "Delete all disposed assets", "Drop the Bills table", "Update all vendor emails").
+
+![SQL safety validation — destructive queries rejected with a clear message](docs/assets/sql-safety-validation.png)
+
+---
 
 ## Setup
 
