@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BarCloud Inventory Chatbot</title>
+    <meta name="description" content="BarCloud ERP Inventory Chatbot — Natural language to SQL with present query visualization." />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <header id="app-header">
+        <div class="header-brand">
+            <div class="logo-icon">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                    <rect x="2" y="8" width="6" height="18" rx="2" fill="#60a5fa"/>
+                    <rect x="11" y="4" width="6" height="22" rx="2" fill="#818cf8"/>
+                    <rect x="20" y="12" width="6" height="14" rx="2" fill="#a78bfa"/>
+                </svg>
+            </div>
+            <h1>BarCloud <span class="accent">Inventory</span></h1>
+        </div>
+        <div class="header-meta">
+            <span class="session-badge" id="sessionBadge" title="Session ID"></span>
+            <span class="status-dot online" id="statusDot"></span>
+        </div>
+    </header>
+
+    <main id="app-main">
+        <!-- Chat Panel -->
+        <section class="chat-panel" id="chatPanel">
+            <div class="chat-messages" id="chatMessages">
+                <div class="welcome-msg">
+                    <div class="welcome-icon">💬</div>
+                    <h2>Welcome to BarCloud Inventory</h2>
+                    <p>Ask any question about your inventory, assets, vendors, orders, or billing. I'll generate the SQL query for you.</p>
+                    <div class="sample-questions">
+                        <button class="sample-q" onclick="askSample(this)">How many assets do we have?</button>
+                        <button class="sample-q" onclick="askSample(this)">Show assets by site</button>
+                        <button class="sample-q" onclick="askSample(this)">Top vendor by assets</button>
+                        <button class="sample-q" onclick="askSample(this)">Open purchase orders</button>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input-bar" id="chatInputBar">
+                <input
+                    type="text"
+                    id="messageInput"
+                    placeholder="Ask about your inventory..."
+                    autocomplete="off"
+                    maxlength="2000"
+                />
+                <button id="sendBtn" onclick="sendMessage()" title="Send message">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M3 10L17 3L10 17L9 11L3 10Z" fill="currentColor"/>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- SQL & Metrics Panel -->
+        <aside class="info-panel" id="infoPanel">
+            <div class="panel-section">
+                <h3 class="panel-title">
+                    <span class="panel-icon">⚡</span> Present Query
+                </h3>
+                <div class="intent-badge-container">
+                    <span class="intent-badge" id="intentBadge">—</span>
+                </div>
+                <pre class="sql-block" id="sqlBlock"><code id="sqlCode">No query yet. Ask a question to see the SQL.</code></pre>
+            </div>
+
+            <div class="panel-section metrics-section">
+                <h3 class="panel-title">
+                    <span class="panel-icon">📊</span> Metrics
+                </h3>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <span class="metric-label">Latency</span>
+                        <span class="metric-value" id="metricLatency">—</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">Provider</span>
+                        <span class="metric-value" id="metricProvider">—</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">Tokens In</span>
+                        <span class="metric-value" id="metricTokensIn">—</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">Tokens Out</span>
+                        <span class="metric-value" id="metricTokensOut">—</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
