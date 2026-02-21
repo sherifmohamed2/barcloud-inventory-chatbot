@@ -18,6 +18,7 @@ The app uses **five strict layers** — no layer may import from a layer above i
 
 **Key design patterns:** Dependency Injection, Abstract Interface (LLMClientInterface), Factory, Structured Output.
 
+---
 ### Web UI
 
 Chat interface with conversation history, present query panel, and metrics (latency, provider, token usage).
